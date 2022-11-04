@@ -1,6 +1,5 @@
 import $ from 'jquery';
 import { initTooltips } from '../../includes/initTooltips';
-import { escapeHtml } from '../../utils/text';
 
 /* generic function for adding a message to message area through JS alone */
 function addMessage(status, text) {
@@ -16,25 +15,19 @@ function addMessage(status, text) {
 
 window.addMessage = addMessage;
 
-window.escapeHtml = escapeHtml;
-
-function initTagField(id, autocompleteUrl, options) {
-  const finalOptions = {
-    autocomplete: { source: autocompleteUrl },
-    preprocessTag(val) {
-      // Double quote a tag if it contains a space
-      // and if it isn't already quoted.
-      if (val && val[0] !== '"' && val.indexOf(' ') > -1) {
-        return '"' + val + '"';
-      }
-
-      return val;
-    },
-    ...options,
+function escapeHtml(text) {
+  const map = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#039;',
   };
 
-  $('#' + id).tagit(finalOptions);
+  return text.replace(/[&<>"']/g, (char) => map[char]);
 }
+
+window.escapeHtml = escapeHtml;
 
 window.initTagField = initTagField;
 
